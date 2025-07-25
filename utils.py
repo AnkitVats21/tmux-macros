@@ -49,7 +49,7 @@ def _generate_tmux_conf(tmux_conf_file, macros, macros_py):
             if isinstance(val, dict) and 'key' in val:
                 key = val['key']
             if key:
-                f.write(f'bind-key {key} run-shell "python3 {macros_py} {name}"\n')
+                f.write(f'bind-key -n {key} run-shell "python3 {macros_py} {name}"\n')
 
 
 def resolve_macros(raw_macros):
