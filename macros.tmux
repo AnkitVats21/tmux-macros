@@ -6,14 +6,18 @@
 #======================================================
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+TMUX_CONF="$HOME/.tmux.conf"
+MACROS_CONF_LINE="source-file \"$CURRENT_DIR/.tmux.macros.conf\""
 
-# Add sourcing of .tmux.macros.conf to user's .tmux.conf if not already present
-if-shell "! grep -q 'source-file \"$CURRENT_DIR/.tmux.macros.conf\"' ~/.tmux.conf" \
-  "run-shell 'echo \"source-file \\\"$CURRENT_DIR/.tmux.macros.conf\\\"\" >> ~/.tmux.conf'"
+# Add sourcing line to .tmux.conf only if not already present
+if ! grep -Fq "$MACROS_CONF_LINE" "$TMUX_CONF"; then
+  echo "$MACROS_CONF_LINE" >> "$TMUX_CONF"
+fi
 
-# Auto-generate macro cache if it doesn't exist
-if-shell "! test -f \"$CURRENT_DIR/macros_cache.py\"" \
-  "run-shell 'python3 \"$CURRENT_DIR/macros.py\" --update-cache'"
+# Regenerate macro cache if not exists
+if [ ! -f "$CURRENT_DIR/macros_cache.py" ]; then
+  python3 "$CURRENT_DIR/macros.py" --update-cache
+fi
 
-# Always regenerate macros and key bindings
-run-shell 'python3 ~/.tmux/plugins/tmux-macros/macros.py --update-cache'
+# Always regenerate (if updated macros.yml)
+run-shell "python3 $CURRENT_DIR/macros.py --update-cache"
