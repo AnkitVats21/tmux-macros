@@ -1,6 +1,10 @@
 import yaml
 import os
 from configparser import ConfigParser
+import subprocess
+
+def tmux_print(message):
+    subprocess.run(["tmux", "display-message", message])
 
 def load_conf():
     user_conf_path = os.path.expanduser("~/.tmux_macros.conf")
@@ -74,7 +78,7 @@ def generate_macros(conf_path="~/.tmux_macros.conf"):
         f.write("MACROS = ")
         f.write(repr(macros))
 
-    print(f"✅ Macros cache written to {cache_file}")
+    tmux_print(f"✅ Macros cache written to {cache_file}")
 
     # 2. Write tmux bindings
     with open(tmux_conf_out, 'w') as f:
@@ -83,7 +87,7 @@ def generate_macros(conf_path="~/.tmux_macros.conf"):
             if bind:
                 f.write(f"bind-key -n {bind} run-shell 'python3 {main_py} {name}'\n")
 
-    print(f"✅ Tmux key bindings written to {tmux_conf_out}")
+    tmux_print(f"✅ Tmux key bindings written to {tmux_conf_out}")
 
 
 
@@ -153,4 +157,4 @@ def parse_macros_yml_and_generate_cache(conf):
 
     _generate_macros_cache(cache_file, resolved_macros)
     _generate_tmux_conf(tmux_conf_file, resolved_macros, macros_py)
-    print("✅ Cache and tmux config generated successfully.")
+    tmux_print("✅ Cache and tmux config generated successfully.")

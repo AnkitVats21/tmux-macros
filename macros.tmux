@@ -20,4 +20,4 @@ if [ ! -f "$CURRENT_DIR/macros_cache.py" ]; then
 fi
 
 # Always regenerate (if updated macros.yml)
-run-shell "python3 $CURRENT_DIR/macros.py --update-cache"
+tmux run-shell "python3 $CURRENT_DIR/macros.py --update-cache"

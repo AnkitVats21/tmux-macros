@@ -9,7 +9,7 @@ import os
 import argparse
 import subprocess
 from time import sleep
-from utils import load_conf, parse_macros_yml_and_generate_cache
+from utils import load_conf, parse_macros_yml_and_generate_cache, tmux_print
 
 
 def get_active_pane():
@@ -23,10 +23,10 @@ def send_command_to_pane(pane_id, command):
 
 
 def run_macro(macros_dict, macro_name):
-    print(f"Running macro: {macro_name}")
+    tmux_print(f"Running macro: {macro_name}")
     active_pane = get_active_pane()
     if macro_name not in macros_dict:
-        print(f"Macro '{macro_name}' not found.")
+        tmux_print(f"Macro '{macro_name}' not found.")
         return
 
     for c in macros_dict[macro_name]['commands']:
@@ -49,7 +49,7 @@ def main():
         return
 
     if not os.path.exists(conf['macros_cache_py']):
-        print("⚠️ Cache not found. Regenerating...")
+        tmux_print("⚠️ Cache not found. Regenerating...")
         parse_macros_yml_and_generate_cache(conf)
 
     from importlib.util import spec_from_file_location, module_from_spec
@@ -61,7 +61,7 @@ def main():
     if args.macro:
         run_macro(macros_dict, args.macro)
     else:
-        print("No macro name provided.")
+        tmux_print("No macro name provided.")
 
 
 if __name__ == "__main__":
