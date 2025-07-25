@@ -1,0 +1,40 @@
+################
+# example macros
+################
+
+
+# Define reusable commands
+enter: &enter
+  - type: keypress
+    value: C-m
+
+message: &message
+  - type: text
+    value: this is some message
+  - *enter
+  - type: sleep
+    value: 400
+  - type: text
+    value: this is another message
+  - *enter
+
+# Define macros
+
+macros:
+  hello:
+    key: "C-l"
+    commands:
+      - *message
+      - type: sleep
+        value: 300
+      - type: text
+        value: "echo reusable hello"
+      - *enter
+
+  hello-world:
+    key: "C-h"
+    commands:
+      - type: text
+        value: "echo Hello, world!"
+      - type: keypress
+        value: C-m

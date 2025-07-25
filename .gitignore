@@ -1,0 +1,4 @@
+__pycache__/
+.vscode/
+.tmux.macros.conf
+macros_cache.py
