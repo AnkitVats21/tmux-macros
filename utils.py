@@ -35,62 +35,6 @@ def load_conf():
 
     return expanded_conf
 
-def expand_macros(macros_dict, shared):
-    def expand(commands):
-        result = []
-        for item in commands:
-            if isinstance(item, str) and item.startswith("*"):
-                ref = item[1:]
-                if ref in shared:
-                    result.extend(expand(shared[ref]))
-                else:
-                    raise ValueError(f"Undefined macro reference: {ref}")
-            else:
-                result.append(item)
-        return result
-
-    for name, data in macros_dict.items():
-        commands = data.get("commands", [])
-        macros_dict[name]["commands"] = expand(commands)
-
-def generate_macros(conf_path="~/.tmux_macros.conf"):
-    conf = load_conf(conf_path)
-    yml_file = conf.get("macros_yml", "~/.tmux/plugin/tmux-macros/macros.yml")
-    cache_file = conf.get("macros_cache_py", "~/.tmux/plugin/tmux-macros/macros_cache.py")
-    tmux_conf_out = conf.get("tmux_macros_conf", "~/.tmux/plugin/tmux-macros/.tmux.macros.conf")
-    main_py = conf.get("macros_py", "~/.tmux/plugin/tmux-macros/macros.py")
-
-    yml_file = os.path.expanduser(yml_file)
-    cache_file = os.path.expanduser(cache_file)
-    tmux_conf_out = os.path.expanduser(tmux_conf_out)
-    main_py = os.path.expanduser(main_py)
-
-    with open(yml_file, 'r') as f:
-        data = yaml.safe_load(f)
-
-    macros = data.get("macros", {})
-    shared_macros = data.get("shared_macros", {})
-
-    expand_macros(macros, shared_macros)
-
-    # 1. Write cache file
-    with open(cache_file, 'w') as f:
-        f.write("MACROS = ")
-        f.write(repr(macros))
-
-    tmux_print(f"✅ Macros cache written to {cache_file}")
-
-    # 2. Write tmux bindings
-    with open(tmux_conf_out, 'w') as f:
-        for name, details in macros.items():
-            bind = details.get("bind")
-            if bind:
-                f.write(f"bind-key -n {bind} run-shell 'python3 {main_py} {name}'\n")
-
-    tmux_print(f"✅ Tmux key bindings written to {tmux_conf_out}")
-
-
-
 def _generate_macros_cache(cache_path, macros_dict):
     with open(cache_path, 'w') as f:
         f.write("MACROS = ")
