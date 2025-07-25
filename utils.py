@@ -4,7 +4,12 @@ from configparser import ConfigParser
 import subprocess
 
 def tmux_print(message):
-    subprocess.run(["tmux", "display-message", message])
+    subprocess.Popen(
+        ["tmux", "display-message", message],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL
+    )
+
 
 def load_conf():
     user_conf_path = os.path.expanduser("~/.tmux_macros.conf")

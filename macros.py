@@ -23,7 +23,7 @@ def send_command_to_pane(pane_id, command):
 
 
 def run_macro(macros_dict, macro_name):
-    tmux_print(f"Running macro: {macro_name}")
+    # tmux_print(f"Running macro: {macro_name}")
     active_pane = get_active_pane()
     if macro_name not in macros_dict:
         tmux_print(f"Macro '{macro_name}' not found.")
