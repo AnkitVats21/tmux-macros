@@ -12,10 +12,12 @@ A simple, extensible [tmux](https://github.com/tmux/tmux) plugin to define and r
 
 ## Installation
 
+### Method 1: Manual Installation
+
 1. **Clone this repo** (or copy files) into your tmux plugins directory:
 
     ```sh
-    git clone https://github.com/yourusername/tmux-macros.git ~/.tmux/plugins/tmux-macros
+    git clone https://github.com/AnkitVats21/tmux-macros.git ~/.tmux/plugins/tmux-macros
     ```
 
 2. **Add the plugin to your `.tmux.conf`:**
@@ -33,6 +35,28 @@ A simple, extensible [tmux](https://github.com/tmux/tmux) plugin to define and r
     ```
     source-file ~/.tmux.conf
     ```
+
+### Method 2: Install with [TPM (Tmux Plugin Manager)](https://github.com/tmux-plugins/tpm)
+
+1. **Add this line to your `.tmux.conf` (inside the TPM plugin block):**
+
+    ```tmux
+    set -g @plugin 'AnkitVats21/tmux-macros'
+    ```
+
+2. **Reload your tmux config:**
+
+    Inside tmux, press <kbd>Prefix</kbd> + <kbd>:</kbd> and run:
+
+    ```
+    source-file ~/.tmux.conf
+    ```
+
+3. **Install the plugin:**
+
+    Press <kbd>Prefix</kbd> + <kbd>I</kbd> (capital i) to fetch and install the plugin using TPM.
+
+    > The plugin will auto-inject a `source-file` line for
 
 ## Example Usage
 
